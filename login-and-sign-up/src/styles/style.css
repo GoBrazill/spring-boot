@@ -1,0 +1,119 @@
+@import url(./global.css);
+
+main {
+    display: flex;    
+    align-items: center;
+    justify-content: space-between;
+
+    width: 100vw;
+    height: 100vh;
+}
+
+main > img {
+    width: 50.8%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 20px 0px 0px 20px;
+}
+
+.form-login-signup {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    padding-right: 170px;
+    padding-left: 180px;
+}
+
+.form-login-signup h1 {
+    font-size: 32px;
+}
+
+.form-login-signup h2 {
+    font-size: 14px;
+    padding-bottom: 40px;
+}
+
+fieldset {
+    display: flex;
+    flex-direction: column;
+    border: none;
+}
+
+label {
+    font-size: 14px;
+    padding-top: 20px;
+}
+
+label > a {
+    font-size: 10px;
+}
+
+.password {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+input[type= "text"], input[type= "email"], input[type= "password"] {
+    width: 405px;
+    padding: 10px;
+
+    border: 1px solid var(--neutral-gray);
+    border-radius: 10px;
+}
+
+input[type= 'checkbox'] {
+    font-size: 9px;
+    margin-bottom: 30px;
+}
+
+input[type= 'submit'] {
+    width: 405px;
+    padding: 6px;
+    border: none;
+    border-radius: 10px;
+
+    color: var(--neutral-white-alt-1) ;
+    background-color: var(--primary-green);
+}
+
+.lines {
+    padding: 60px 0;
+    display: flex;
+    align-items: center;
+    gap: 4.5px;
+}
+
+hr {
+    width: 190px;
+    border-width: 2px;
+}
+
+.btn-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+
+button {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 4px 20px;
+    margin-bottom: 20px;
+    
+    font-size: 12px;
+    border: 1px solid var(--neutral-gray);
+    border-radius: 10px;
+    background-color: transparent;
+}
+
+p {
+    align-self: center;
+    font-size: 14px;
+}
+
+a {
+    color: var(--primary-blue);
+}
