@@ -2,6 +2,7 @@ package com.login.exemplo.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.login.exemplo.entity.Usuario;
 import com.login.exemplo.repositories.UsuarioRepository;
 
+@CrossOrigin(origins = "http://127.0.0.1:5500")
 @RestController	
 public class UsuarioController {
 	
@@ -24,12 +26,12 @@ public class UsuarioController {
 	}
 	
 	@PostMapping(value = "login")
-	public ResponseEntity<?> login(Usuario user) {
+	public ResponseEntity<?> login(@RequestBody Usuario user) {
 		Usuario findUser = usuarioRepository.findByEmail(user.getEmail());
 		if (findUser == null) {
 			return ResponseEntity.ok("Usuario não encontrado");
 		} else {
-			if (findUser.getPassword() == user.getPassword()) {
+			if (findUser.getPassword().equals(user.getPassword())) {
 				return ResponseEntity.ok("Logado com sucesso!");				
 			} else {
 				return ResponseEntity.ok("Senha incorreta");
