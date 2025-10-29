@@ -117,3 +117,29 @@ p {
 a {
     color: var(--primary-blue);
 }
+
+body > h1 {
+    margin-top: 40px;
+    justify-self: center;
+}
+
+section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    width: 100vw;
+    height: 100vh;
+}
+
+.card {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    width: 300px;
+    height: 150px;
+
+    background-color: darkslateblue;
+    border: 1px solid #f4f4f4;
+}
