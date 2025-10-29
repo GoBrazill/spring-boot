@@ -23,7 +23,6 @@ form.addEventListener("submit", async (event) => {
       window.location.href = "../../index.html"
     }
 
-    alert(data);
   } catch (error) {
     console.error("Erro:", error);
     alert("Erro ao conectar ao servidor.");

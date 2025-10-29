@@ -1,4 +1,5 @@
 let userContainer = document.getElementById("user-container")
+
 async function loadUsers() {
     try {
         const response = await fetch("http://localhost:8080/listar/usuarios", {
@@ -12,24 +13,41 @@ async function loadUsers() {
 
         const users = await response.json();
 
-        users.array.forEach(element => {
+        users.forEach(element => {
             const card = document.createElement("div")
             card.className = "card"
             card.innerHTML = `
-                <h2>${element.name}</h2>
-                <p>nome: ${element.name}</p>
-                <p>email: ${element.email}</p>
-                <p>senha: ${element.password}</p>
+                <p>Id: ${element.id}</p>
+                <p>Nome: ${element.name}</p>
+                <p>Email: ${element.email}</p>
+                <p>Senha: ${element.password}</p>
                 `
             userContainer.appendChild(card)
         });
 
-        console.log(users);
-        alert(users);
     } catch (error) {
         console.error("Erro:", error);
         alert("Erro ao conectar ao servidor.");
     };
+}
+
+async function deleteUser() {
+    try {
+        const response = await fetch("http://localhost:8080/delete/usuario/{id}", {
+            method: "DELETE",
+            headers: { "Content-Type": "application/json" }
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error ${response.status}`);
+        }
+
+
+
+    } catch (error) {
+        console.error("Erro:", error);
+        alert("Erro ao conectar ao servidor.");
+    }
 }
 
 loadUsers();

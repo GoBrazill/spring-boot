@@ -1,27 +1,32 @@
 const form = document.getElementById("loginForm");
 
-    form.addEventListener("submit", async (event) => {
-      event.preventDefault();
+form.addEventListener("submit", async (event) => {
+  event.preventDefault();
 
-      const name = document.getElementById("name").value
-      const email = document.getElementById("email").value;
-      const password = document.getElementById("password").value;
-        
-      const user = { name, email, password };
+  const name = document.getElementById("name").value
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
 
-      try {
-        const response = await fetch("http://localhost:8080/usuario/cadastro", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify(user)
-        });
+  const user = { name, email, password };
 
-        const data = await response.text();
-        alert(data);
-      } catch (error) {
-        console.error("Erro:", error);
-        alert("Erro ao conectar ao servidor.");
-      }
+  try {
+    const response = await fetch("http://localhost:8080/usuario/cadastro", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(user)
     });
+
+    const data = await response.text();
+    alert(data);
+
+    if (data == "Usuario salvo!") {
+      window.location.href = "./login"
+    }
+
+  } catch (error) {
+    console.error("Erro:", error);
+    alert("Erro ao conectar ao servidor.");
+  }
+});

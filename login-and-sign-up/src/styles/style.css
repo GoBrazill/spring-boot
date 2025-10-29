@@ -123,23 +123,29 @@ body > h1 {
     justify-self: center;
 }
 
-section {
+section#user-container {
     display: flex;
-    justify-content: center;
-    align-items: center;
-
-    width: 100vw;
-    height: 100vh;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 20px;
 }
 
 .card {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
 
+    padding: 10px;
+    gap: 5px;
     width: 300px;
-    height: 150px;
+    height: 120px;
 
+    border-radius: 20px;
     background-color: darkslateblue;
-    border: 1px solid #f4f4f4;
+    color: #f4f4f4;
+}
+
+.card > p {
+    font-size: 16px;
 }
