@@ -4,12 +4,14 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -59,14 +61,50 @@ public class UsuarioController {
 		return usuarioRepository.findById(id);
 	}
 	
-	@DeleteMapping(value = "delete/usuario/{id}")
-	public void deletePorId(@PathVariable int id){
-		if (usuarioRepository.existsById(id) == true){
-			
- 			System.out.println("Usuário deletado com sucesso0");
+//	jeito que fiz inicialmente
+//	@DeleteMapping(value = "delete/usuario/{id}")
+//	public void deletePorId(@PathVariable int id){
+//		if (usuarioRepository.existsById(id) == true){
+//			
+// 			System.out.println("Usuário deletado com sucesso");
+//		} else {
+//			
+//			System.out.println("Usuário não encontrado");
+//		}
+//	}
+	
+	@DeleteMapping(value = "deletar/usuario/{id}")
+	public ResponseEntity<?> deletar(@PathVariable int id) {
+		if(usuarioRepository.existsById(id)) {
+			usuarioRepository.deleteById(id);
+			return ResponseEntity.status(HttpStatus.OK).body("Excluído com sucesso");
 		} else {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuário não encontrado");
+		}
+	}
+	
+//	jeito da professora
+//	public ResponseEntity<Void> deletar(@PathVariable int id) {
+//		if (usuarioRepository.existsById(id)) {
+//			usuarioRepository.deleteById(id);
+//			return ResponseEntity.noContent().build(); // 204 status no content(usuario deletado com sucesso 
+//		} else {
+//			return ResponseEntity.notFound().build(); // 404 status de erro
+//		}
+//	}
+	
+	@PutMapping(value = "alterar/usuario/{id}")
+	public ResponseEntity<?> atualizarDados(@PathVariable int id, @RequestBody Usuario novoUsuario){
+		Optional<Usuario> UsuarioExistente = usuarioRepository.findById(id);
 			
-			System.out.println("Usuário não encontrado");
+		if (UsuarioExistente.isPresent()) {
+			Usuario usuario = UsuarioExistente.get();
+			usuario.setName(novoUsuario.getName());
+			usuario.setPassword(novoUsuario.getPassword());
+			usuarioRepository.save(novoUsuario);
+			return ResponseEntity.ok(usuario);
+		} else {
+			return ResponseEntity.notFound().build();
 		}
 	}
 }
