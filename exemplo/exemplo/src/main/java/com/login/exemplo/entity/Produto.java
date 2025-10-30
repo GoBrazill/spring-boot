@@ -18,14 +18,18 @@ public class Produto {
 		
 	}
 	
-	public Produto(int id, String nome, double preco, int quantidade) {
+	public Produto(String nome, double preco, int quantidade) {
 		super();
-		this.id = id;
 		this.nome = nome;
 		this.preco = preco;
 		this.quantidade = quantidade;
 	}
 		
+	@Override
+	public String toString() {
+		return "[id=" + id + ", nome=" + nome + ", preco=" + preco + ", quantidade=" + quantidade + "]";
+	}
+
 	public int getId() {
 		return id;
 	}

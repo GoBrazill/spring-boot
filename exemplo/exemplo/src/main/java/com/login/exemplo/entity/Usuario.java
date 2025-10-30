@@ -30,6 +30,11 @@ public class Usuario {
 		this.password = password;
 	}
 	
+	@Override
+	public String toString() {
+		return "[id=" + id + ", name=" + name + ", email=" + email + ", password=" + password + "]";
+	}
+
 	public int getId() {
 		return id;
 	}
