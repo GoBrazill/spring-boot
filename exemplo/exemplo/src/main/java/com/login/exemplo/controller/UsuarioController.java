@@ -15,8 +15,11 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.login.exemplo.dto.UsuarioRequestDTO;
 import com.login.exemplo.entity.Usuario;
 import com.login.exemplo.repositories.UsuarioRepository;
+
+import jakarta.validation.Valid;
 
 @CrossOrigin(origins = "http://127.0.0.1:5500")
 @RestController
@@ -27,7 +30,7 @@ public class UsuarioController {
 
 //	ResponseEntity<?> retorna uma mensagem com um protocolo http
 	@PostMapping(value = "usuario/cadastro")
-	public ResponseEntity<?> saveUser(@RequestBody Usuario user) {
+	public ResponseEntity<?> saveUser(@Valid @RequestBody UsuarioRequestDTO user) {
 		Usuario usuario = new Usuario(user.getName(), user.getEmail(), user.getPassword());
 		usuarioRepository.save(usuario);
 		return ResponseEntity.ok("Usuario salvo!" + usuario.toString());

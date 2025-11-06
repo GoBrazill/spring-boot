@@ -12,44 +12,51 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.login.exemplo.dto.ProdutoRequestDTO;
 import com.login.exemplo.entity.Produto;
 import com.login.exemplo.repositories.ProdutoRepository;
 
+import jakarta.validation.Valid;
+
 @RestController
+@RequestMapping("produto")
 public class ProdutoController {
 	
 	@Autowired
 	ProdutoRepository produtoRepository;
 	
-	@GetMapping(value = "mostrar/produto/{id}")
+//	pode definir o endpoint sem o value só declarando("/mostrar/{id}
+	@GetMapping(value = "/mostrar/{id}")
 	public Optional<Produto> mostrarProdutoPorId(@PathVariable int id) {
 		
 		return produtoRepository.findById(id);
 	}
 	
-	@GetMapping(value = "mostrar/produtos")
+	@GetMapping(value = "/mostrar/todos")
 	public List<Produto> mostrarProdutos() {
 		
 		return produtoRepository.findAll();
 	}
 	
-	@PostMapping(value = "produto/cadastro")
-	public ResponseEntity<?> cadastraProduto(@RequestBody Produto produto) {
+	@PostMapping(value = "cadastro")
+	public ResponseEntity<?> cadastraProduto(@Valid @RequestBody ProdutoRequestDTO produto) {
 		Produto prod = new Produto(produto.getNome(), produto.getPreco(), produto.getQuantidade());
 		produtoRepository.save(prod);
 		
 		return ResponseEntity.ok("Produto cadastrado!" + produto.toString());
 	}
 	
-	@PutMapping(value = "alterar/produto/quantidade/{id}")
+	@PutMapping(value = "/alterar/quantidade/{id}")
 	public ResponseEntity<?> alterarQuantidade(@PathVariable int id, @RequestBody Produto produto) {
 		Optional<Produto> produtoExiste = produtoRepository.findById(id);
+		
 		if (produtoExiste.isPresent()) {
 			Produto prod = produtoExiste.get();
-			produto.setQuantidade(produto.getQuantidade());
-			produtoRepository.save(produto);
+			prod.setQuantidade(produto.getQuantidade());
+			produtoRepository.save(prod);
 			return ResponseEntity.ok(prod);
 		} else {
 			return ResponseEntity.notFound().build();
@@ -58,7 +65,7 @@ public class ProdutoController {
 	}
 	
 	
-	@DeleteMapping(value = "deletar/produto/{id}")
+	@DeleteMapping(value = "/deletar/{id}")
 	public ResponseEntity<?> deletarProduto(@PathVariable int id) {
 		if(produtoRepository.existsById(id)) {
 			produtoRepository.deleteById(id);			
