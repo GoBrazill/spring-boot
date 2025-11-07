@@ -1,5 +1,6 @@
 package com.login.exemplo.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.login.exemplo.dto.ProdutoRequestDTO;
+import com.login.exemplo.dto.ProdutoResponseDTO;
 import com.login.exemplo.entity.Produto;
 import com.login.exemplo.repositories.ProdutoRepository;
 
@@ -36,9 +38,13 @@ public class ProdutoController {
 	}
 	
 	@GetMapping(value = "/mostrar/todos")
-	public List<Produto> mostrarProdutos() {
+	public List<ProdutoResponseDTO> mostrarProdutos() {
+		List<Produto> produtos = produtoRepository.findAll();
+		List<ProdutoResponseDTO> listaDeProdutos =  new ArrayList<>();
 		
-		return produtoRepository.findAll();
+		listaDeProdutos = produtos.stream().map(prod -> new ProdutoResponseDTO(prod, prod.getQuantidade() * prod.getPreco())).toList();
+		
+		return listaDeProdutos;
 	}
 	
 	@PostMapping(value = "cadastro")

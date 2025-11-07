@@ -7,7 +7,6 @@ import jakarta.validation.constraints.Size;
 public class UsuarioRequestDTO {
 	
 	
-	
 	@NotBlank(message = "O nome não poder ser nulo")
 	private String name;
 	

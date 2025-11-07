@@ -1,5 +1,6 @@
 package com.login.exemplo.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.login.exemplo.dto.UsuarioRequestDTO;
+import com.login.exemplo.dto.UsuarioResponseDTO;
+import com.login.exemplo.dto.UsuarioUpdateDTO;
 import com.login.exemplo.entity.Usuario;
 import com.login.exemplo.repositories.UsuarioRepository;
 
@@ -52,10 +55,13 @@ public class UsuarioController {
 	}
 
 	@GetMapping(value = "listar/usuarios")
-	public List<Usuario> listUsuarios() {
-//		List<Usuario> usuarios = usuarioRepository.findAll();
-
-		return usuarioRepository.findAll();
+	public List<UsuarioResponseDTO> listUsuarios() {
+		List<Usuario> usuarios = usuarioRepository.findAll();
+		List<UsuarioResponseDTO> listaDeUsuarios =  new ArrayList<>();
+		
+		listaDeUsuarios = usuarios.stream().map(UsuarioResponseDTO::new).toList();
+		
+		return listaDeUsuarios;
 	}
 
 	@GetMapping(value = "listar/usuario/{id}")
@@ -97,15 +103,15 @@ public class UsuarioController {
 //	}
 
 	@PutMapping(value = "alterar/usuario/{id}")
-	public ResponseEntity<?> atualizarDados(@PathVariable int id, @RequestBody Usuario novoUsuario) {
+	public ResponseEntity<?> atualizarDados(@PathVariable int id, @Valid @RequestBody UsuarioUpdateDTO novoUsuario) {
 		Optional<Usuario> UsuarioExistente = usuarioRepository.findById(id);
 
 		if (UsuarioExistente.isPresent()) {
 			Usuario usuario = UsuarioExistente.get();
 			usuario.setName(novoUsuario.getName());
 			usuario.setPassword(novoUsuario.getPassword());
-			usuarioRepository.save(novoUsuario);
-			return ResponseEntity.ok(usuario);
+			usuarioRepository.save(usuario);
+			return ResponseEntity.status(HttpStatus.OK).body("Nome e senha alterados com sucesso" + "\n id: " + usuario.getId() + "\n name: " + usuario.getName() + "\n email: " + usuario.getEmail());
 		} else {
 			return ResponseEntity.notFound().build();
 		}
