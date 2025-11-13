@@ -1,6 +1,5 @@
 package com.login.exemplo.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,7 +19,7 @@ import com.login.exemplo.dto.UsuarioRequestDTO;
 import com.login.exemplo.dto.UsuarioResponseDTO;
 import com.login.exemplo.dto.UsuarioUpdateDTO;
 import com.login.exemplo.entity.Usuario;
-import com.login.exemplo.repositories.UsuarioRepository;
+import com.login.exemplo.service.UsuarioService;
 
 import jakarta.validation.Valid;
 
@@ -29,45 +28,31 @@ import jakarta.validation.Valid;
 public class UsuarioController {
 
 	@Autowired
-	UsuarioRepository usuarioRepository;
+	UsuarioService usuarioService;
 
 //	ResponseEntity<?> retorna uma mensagem com um protocolo http
 	@PostMapping(value = "usuario/cadastro")
 	public ResponseEntity<?> saveUser(@Valid @RequestBody UsuarioRequestDTO user) {
-		Usuario usuario = new Usuario(user.getName(), user.getEmail(), user.getPassword());
-		usuarioRepository.save(usuario);
-		return ResponseEntity.ok("Usuario salvo!" + usuario.toString());
+		return ResponseEntity.status(HttpStatus.CREATED).
+				body(usuarioService.saveUser(user));
 	}
 
 	@PostMapping(value = "login")
-	public ResponseEntity<?> login(@RequestBody Usuario user) {
-		Usuario findUser = usuarioRepository.findByEmail(user.getEmail());
-		if (findUser == null) {
-			return ResponseEntity.ok("Usuario não encontrado");
-		} else {
-			if (findUser.getPassword().equals(user.getPassword())) {
-				return ResponseEntity.ok("Logado com sucesso!");
-			} else {
-				return ResponseEntity.ok("Senha incorreta");
-			}
-		}
-
+	public ResponseEntity<?> login(@RequestBody UsuarioRequestDTO user) {
+		
+		return ResponseEntity.ok(usuarioService.login(user));
 	}
 
 	@GetMapping(value = "listar/usuarios")
 	public List<UsuarioResponseDTO> listUsuarios() {
-		List<Usuario> usuarios = usuarioRepository.findAll();
-		List<UsuarioResponseDTO> listaDeUsuarios =  new ArrayList<>();
 		
-		listaDeUsuarios = usuarios.stream().map(UsuarioResponseDTO::new).toList();
-		
-		return listaDeUsuarios;
+		return usuarioService.listUsuarios();
 	}
 
 	@GetMapping(value = "listar/usuario/{id}")
 	public Optional<Usuario> usuarioPorId(@PathVariable int id) {
 
-		return usuarioRepository.findById(id);
+		return usuarioService.usuarioPorId(id);
 	}
 
 //	jeito que fiz inicialmente (só aparece a mensagem dentro do console, sempre mandando o código 200 para o postman maesmo se o usuario não existir
@@ -85,12 +70,8 @@ public class UsuarioController {
 //	jeitos da professora
 	@DeleteMapping(value = "deletar/usuario/{id}")
 	public ResponseEntity<?> deletar(@PathVariable int id) {
-		if (usuarioRepository.existsById(id)) {
-			usuarioRepository.deleteById(id);
-			return ResponseEntity.status(HttpStatus.OK).body("Excluído com sucesso");
-		} else {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuário não encontrado");
-		}
+
+		return ResponseEntity.ok(usuarioService.deletar(id));
 	}
 
 //	public ResponseEntity<Void> deletar(@PathVariable int id) {
@@ -104,16 +85,7 @@ public class UsuarioController {
 
 	@PutMapping(value = "alterar/usuario/{id}")
 	public ResponseEntity<?> atualizarDados(@PathVariable int id, @Valid @RequestBody UsuarioUpdateDTO novoUsuario) {
-		Optional<Usuario> UsuarioExistente = usuarioRepository.findById(id);
-
-		if (UsuarioExistente.isPresent()) {
-			Usuario usuario = UsuarioExistente.get();
-			usuario.setName(novoUsuario.getName());
-			usuario.setPassword(novoUsuario.getPassword());
-			usuarioRepository.save(usuario);
-			return ResponseEntity.status(HttpStatus.OK).body("Nome e senha alterados com sucesso" + "\n id: " + usuario.getId() + "\n name: " + usuario.getName() + "\n email: " + usuario.getEmail());
-		} else {
-			return ResponseEntity.notFound().build();
-		}
+		
+		return ResponseEntity.ok(usuarioService.atualizarDados(id, novoUsuario));
 	}
 }
